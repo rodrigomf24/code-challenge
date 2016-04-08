@@ -25,6 +25,7 @@ export default React.createClass({
             <div className="row">
                 <div className="col-xs-12">
                     <h1>Household vehicle form</h1>
+                    
                 </div>
             </div>
         );
