@@ -16,10 +16,13 @@ export default React.createClass({
             persons:{
                 list:[]
             },
-            vehicles:[],
+            vehicles:{
+                list:[]
+            },
             showHouseholdForm:false,
-            showPersonForm:true,
-            showVehicleForm:false
+            showPersonForm:false,
+            showVehicleForm:true,
+            showSummary:true
         };
     },
     componentDidMount:function() {},
@@ -27,10 +30,10 @@ export default React.createClass({
         console.log('PREVIOUS', current, data);
         switch(current){
             case 'persons':
-                this.setState({persons:{list:data}, showHouseholdForm:true, showPersonForm:false, showVehicleForm:false});
+                this.setState({persons:{list:data}, showHouseholdForm:true, showPersonForm:false, showVehicleForm:false, showSummary:false});
                 break;
             case 'vehicles':
-                this.setState({vehicles:data, showHouseholdForm:false, showPersonForm:true, showVehicleForm:false});
+                this.setState({vehicles:{list:data}, showHouseholdForm:false, showPersonForm:true, showVehicleForm:false, showSummary:false});
                 break;
             default:
                 break;
@@ -39,24 +42,27 @@ export default React.createClass({
     handleHouseholdFormSubmit:function(data) {
         // do post here
         console.log('House',data);
-        this.setState({house:data, showHouseholdForm:false, showPersonForm:true, showVehicleForm:false});
+        this.setState({house:data, showHouseholdForm:false, showPersonForm:true, showVehicleForm:false, showSummary:false});
     },
     handleHouseholdPersonFormSubmit:function(data) {
         // do post here
         console.log('Person',data);
-        this.setState({persons:data, showHouseholdForm:false, showPersonForm:false, showVehicleForm:true});
+        this.setState({persons:data, showHouseholdForm:false, showPersonForm:false, showVehicleForm:true, showSummary:false});
     },
     handleHouseholdVehicleFormSubmit:function(data) {
         // do post here
         console.log('Vehicle',data);
+        this.setState({vehicles:data, showHouseholdForm:false, showPersonForm:false, showVehicleForm:false, showSummary:true});
     },
     render:function() {
+        //{ this.state.showSummary ? <HouseholdSummary /> : null }
         return (
             <div className="col-xs-12">
                 <div className="row">
                     { this.state.showHouseholdForm ? <HouseholdForm data={this.state.house} onFormSubmit={this.handleHouseholdFormSubmit} /> : null}
                     { this.state.showPersonForm ? <HouseholdPersonForm data={this.state.persons} onNextButtonClick={this.handleHouseholdPersonFormSubmit} onPreviousButtonClick={this.handlePrevious} /> : null}
                     { this.state.showVehicleForm ? <HouseholdVehicleForm data={this.state.vehicles} onNextButtonClick={this.handleHouseholdVehicleFormSubmit} onPreviousButtonClick={this.handlePrevious} /> : null}
+                    
                 </div>
             </div>
         );

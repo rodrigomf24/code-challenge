@@ -141,7 +141,7 @@ export default React.createClass({
                         <div className="form-group">
                             {genderNodes}
                         </div>
-                        <button type="button" onClick={this.handleAdd} className="btn btn-info">Add one</button>
+                        <button type="button" onClick={this.handleAdd} className="btn btn-info">Add new</button>
                     </form>
                 </div>
             </div>
