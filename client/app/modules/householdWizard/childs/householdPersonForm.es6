@@ -10,7 +10,9 @@ export default React.createClass({
     componentDidMount:function() {
         if(this.props.data !== void(0)){
             console.log(this.props.data.list);
-            this.setState({list:this.props.data.list});
+            if(this.props.data.list !== void(0)){
+                this.setState({list:this.props.data.list});
+            }
         }
     },
     handlePreviousButtonClick:function(){

@@ -14,50 +14,63 @@ export default React.createClass({
             this.setState(Object.assign(this.state, this.props.data));
         }
     },
-    handleAdd:function() {
+    fieldsAreEmpty:function(){
         var emptyFields = false, count=0, form=this.state;
-        Object.keys(form).map(function(key){
-            console.log(form[key], key);
-            if(form[key] === void(0) || form[key] === null || form[key] === ''){
-                emptyFields = true;
-            }
-            count++;
-        });
-        if(count === Object.keys(form).length){
-            if(emptyFields === true){
-                window.alert('You must fill all the form fields');
-            } else {
-                if(this.props.onNewButtonClick !== void(0) && typeof(this.props.onNewButtonClick) === 'function'){
-                    this.props.onNewButtonClick(form);
+        return new Promise(function(resolve, reject){
+            Object.keys(form).map(function(key){
+                console.log(form[key], key);
+                if(form[key] === void(0) || form[key] === null || form[key] === ''){
+                    emptyFields = true;
+                }
+                count++;
+            });
+            if(count === Object.keys(form).length){
+                if(emptyFields === true){
+                    resolve(true);
+                } else {
+                    resolve(false);
                 }
             }
-        }
+        });
     },
-    handleRemoveButtonClick:function(){
+    handleAdd:function() {
+        var _this = this;
+        this.fieldsAreEmpty().then(function(response){
+            console.log(response);
+            if(response){
+                window.alert('You must fill all the form fields');
+            } else {
+                if(_this.props.onNewButtonClick !== void(0) && typeof(_this.props.onNewButtonClick) === 'function'){
+                    _this.props.onNewButtonClick(_this.state);
+                }
+            }
+        });
+    },
+    handleRemoveButtonClick:function() {
         if(this.props.onRemoveButtonClick !== void(0) && typeof(this.props.onRemoveButtonClick) === 'function'){
             this.props.onRemoveButtonClick(this.props.position);
         }
     },
-    updateParentState:function() {
-        if(this.props.onStateChange !== void(0) && typeof(this.props.onStateChange) === 'function'){
+    handleParentUpdate:function() {
+        if(this.props.onStateChange !== void(0) && typeof(this.props.onStateChange) === 'function') {
             this.props.onStateChange(this.props.position, this.state);
         }
     },
     handleMakeChange:function(value) {
         this.setState({make:value});
-        this.updateParentState();
+        this.handleParentUpdate();
     },
     handleModelChange:function(value) {
         this.setState({model:value});
-        this.updateParentState();
+        this.handleParentUpdate();
     },
     handleYearChange:function(value) {
         this.setState({year:value});
-        this.updateParentState();
+        this.handleParentUpdate();
     },
     handleLicensePlateChange:function(value) {
         this.setState({license_plate:value});
-        this.updateParentState();
+        this.handleParentUpdate();
     },
     render:function() {
         var valueLink = {

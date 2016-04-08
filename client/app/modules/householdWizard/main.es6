@@ -47,12 +47,12 @@ export default React.createClass({
     handleHouseholdPersonFormSubmit:function(data) {
         // do post here
         console.log('Person',data);
-        this.setState({persons:data, showHouseholdForm:false, showPersonForm:false, showVehicleForm:true, showSummary:false});
+        this.setState({persons:{list:data}, showHouseholdForm:false, showPersonForm:false, showVehicleForm:true, showSummary:false});
     },
     handleHouseholdVehicleFormSubmit:function(data) {
         // do post here
         console.log('Vehicle',data);
-        this.setState({vehicles:data, showHouseholdForm:false, showPersonForm:false, showVehicleForm:false, showSummary:true});
+        this.setState({vehicles:{list:data}, showHouseholdForm:false, showPersonForm:false, showVehicleForm:false, showSummary:true});
     },
     render:function() {
         //{ this.state.showSummary ? <HouseholdSummary /> : null }
