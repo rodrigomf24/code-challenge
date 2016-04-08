@@ -5,22 +5,40 @@ import HouseholdVehicleForm from "./childs/householdVehicleForm"
 
 export default React.createClass({
     getInitialState:function() {
-        return {household:{
-            info:{
+        return {
+            house:{
                 address:void(0),
                 zip:void(0),
                 city:void(0),
                 state:void(0),
                 bedrooms_number:0
             },
-            people:[],
-            vehicles:[]
-        }};
+            persons:{
+                list:[]
+            },
+            vehicles:[],
+            showHouseholdForm:false,
+            showPersonForm:true,
+            showVehicleForm:false
+        };
     },
     componentDidMount:function() {},
+    handlePrevious:function(current, data){
+        switch(current){
+            case 'persons':
+                this.setState({persons:data, showHouseholdForm:true, showPersonForm:false, showVehicleForm:false});
+                break;
+            case 'vehicles':
+                this.setState({vehicles:data, showHouseholdForm:false, showPersonForm:true, showVehicleForm:false});
+                break;
+            default:
+                break;
+        }
+    },
     handleHouseholdFormSubmit:function(data) {
         // do post here
-        console.log('FROM WIZARD',data);
+        console.log('House',data);
+        this.setState({household:data, showHouseholdForm:false, showPersonForm:true});
     },
     handleHouseholdPersonFormSubmit:function(data) {
         // do post here
@@ -33,7 +51,9 @@ export default React.createClass({
         return (
             <div className="col-xs-12">
                 <div className="row">
-                    <HouseholdForm data={this.state.household.info} onFormSubmit={this.handleHouseholdFormSubmit} />
+                    { this.state.showHouseholdForm ? <HouseholdForm data={this.state.house} onFormSubmit={this.handleHouseholdFormSubmit} /> : null}
+                    { this.state.showPersonForm ? <HouseholdPersonForm data={this.state.persons} onNextButtonClick={this.handleHouseholdPersonFormSubmit} onPreviousButtonClick={this.handlePrevious} /> : null}
+                    { this.state.showVehicleForm ? <HouseholdVehicleForm data={this.state.vehicles} onNextButtonClick={this.handleHouseholdVehicleFormSubmit} onPreviousButtonClick={this.handlePrevious} /> : null}
                 </div>
             </div>
         );

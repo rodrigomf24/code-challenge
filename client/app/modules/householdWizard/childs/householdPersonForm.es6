@@ -1,24 +1,24 @@
 import React from "react";
+import PersonForm from "./personForm";
 
 export default React.createClass({
     getInitialState:function() {
-        return {form:{
-            first_name:void(0),
-            last_name:void(0),
-            email:void(0),
-            age:void(0),
-            gender:void(0)
-        }};
+        return {
+            list:[]
+        };
     },
     componentDidMount:function() {
         if(this.props.data !== void(0)){
-            this.state.form = Object.assign(this.state.form, this.props.data);
+            this.setState(Object.assign(this.state, this.props.data));
         }
     },
-    handleSubmit:function(e) {
-        e.preventDefault();
-        var emptyFields = false, count=0, form=this.state.form;
-        console.log(this.state.form);
+    handlePreviousButtonClick:function(){
+        if(this.props.onPreviousButtonClick !== void(0) && typeof(this.props.onPreviousButtonClick) === 'function'){
+            this.props.onPreviousButtonClick('persons', this.state.list);
+        }
+    },
+    handleNextButtonClick:function() {
+        var emptyFields = false, count=0, form=this.state;
         Object.keys(form).map(function(key){
             console.log(form[key], key);
             if(form[key] === void(0) || form[key] === null || form[key] === ''){
@@ -26,127 +26,60 @@ export default React.createClass({
             }
             count++;
         });
-        if(count === Object.keys(this.state.form).length){
+        if(count === Object.keys(form).length){
             if(emptyFields === true){
                 window.alert('You must fill all the form fields');
             } else {
-                if(this.props.onFormSubmit !== void(0) && typeof(this.props.onFormSubmit) === 'function'){
-                    this.props.onFormSubmit(form);
+                if(this.props.onNextButtonClick !== void(0) && typeof(this.props.onNextButtonClick) === 'function'){
+                    this.props.onNextButtonClick(form);
                 }
             }
         }
     },
-    handleFirstNameChange:function(value) {
-        this.state.form.first_name = value;
+    handleAddNewButtonClick:function(){
+        var person = [{
+            first_name:void(0),
+            last_name:void(0),
+            email:void(0),
+            age:void(0),
+            gender:'m'
+        }];
+        var list = (this.state.list.length > 0) ? this.state.list.concat(person) : person;
+        this.setState({list:list});
     },
-    handleLastNameChange:function(value) {
-        this.state.form.last_name = value;
-    },
-    handleEmailChange:function(value) {
-        this.state.form.email = value;
-    },
-    handleAgeChange:function(value) {
-        this.state.form.age = value;
-    },
-    handleGenderChange:function(event) {
-        console.log(event);
-        // this.state.form.bedrooms_number = (value > 0) ? value : 0;
+    handleRemoveButtonClick:function(person){
+        if(this.state.list.indexOf(person) !== -1) {
+            this.state.list.splice(this.state.list.indexOf(person), 1);
+            this.setState({list:this.state.list});
+        }
     },
     render:function() {
-        var valueLink = {
-            first_name:{
-                value: this.state.form.first_name,
-                requestChange: this.handleFirstNameChange
-            },
-            last_name:{
-                value: this.state.form.last_name,
-                requestChange: this.handleLastNameChange
-            },
-            email:{
-                value: this.state.form.email,
-                requestChange: this.handleEmailChange
-            },
-            age:{
-                value: this.state.form.age,
-                requestChange: this.handleAgeChange
-            }
-        };
-        var genderNodes = ['m', 'f'].map(function(type){
-            var checked = (type === this.state.gender) ? 'checked' : '';
+        var _this = this;
+        var peopleList = this.state.list.map(function(person, index){
             return (
-                <div className="radio-inline">
-                    <label>
-                        <input
-                            type="radio"
-                            name="gender"
-                            checked={checked}
-                            onChange={this.handleGenderChange}
-                            value={type}
-                        /> Male
-                    </label>
-                </div>
-            );
-        }).bind(this);
+                <PersonForm key={index} data={person} onRemoveButtonClick={_this.handleRemoveButtonClick} onNewButtonClick={_this.handleAddNewButtonClick} />
+            )
+        });
         return (
             <div className="row">
                 <div className="col-xs-12">
                     <div className="page-header">
-                        <h1>Household Wizard <small>household information</small></h1>
+                        <h1>Household Wizard <small>household people information</small></h1>
                     </div>
-                    <form className="commentForm" onSubmit={this.handleSubmit}>
-                        <div className="form-group">
-                            <label htmlFor="first_name">First Name</label>
-                            <input
-                                id="first_name"
-                                className="form-control"
-                                type="text"
-                                placeholder="John"
-                                valueLink={valueLink.first_name}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="last_name">Last Name</label>
-                            <input
-                                id="last_name"
-                                type="text"
-                                className="form-control"
-                                placeholder="Connor"
-                                valueLink={valueLink.last_name}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <input
-                                id="email"
-                                type="email"
-                                className="form-control"
-                                placeholder="john@sky.net"
-                                valueLink={valueLink.email}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="age">Age</label>
-                            <input
-                                id="age"
-                                type="number"
-                                min="0"
-                                className="form-control"
-                                placeholder="18"
-                                valueLink={valueLink.age}
-                            />
-                        </div>
-                        <div className="form-group">
-                            {genderNodes}
+                    <div>
+                        { this.state.list.length === 0 ? <button type="button" className="btn btn-default btn-block" onClick={this.handleAddNewButtonClick}>Add new</button> : null}
+                        <div className="people-list">
+                            {peopleList}
                         </div>
                         <nav>
                             <ul className="pager">
                                 <li>
-                                    <button type="button" className="btn btn-info">Previous</button>
-                                    <button type="submit" className="btn btn-info">Next</button>
+                                    <button type="button" onClick={this.handlePreviousButtonClick} className="btn btn-info">Previous</button>
+                                    <button type="button" onClick={this.handleNextButtonClick} className="btn btn-info">Next</button>
                                 </li>
                             </ul>
                         </nav>
-                    </form>
+                    </div>
                 </div>
             </div>
         );
