@@ -36,7 +36,7 @@ export default React.createClass({
     },
     handleRemovePersonButtonClick:function(){
         if(this.props.onRemoveButtonClick !== void(0) && typeof(this.props.onRemoveButtonClick) === 'function'){
-            this.props.onRemoveButtonClick(this.state);
+            this.props.onRemoveButtonClick(this.props.position);
         }
     },
     handleFirstNameChange:function(value) {

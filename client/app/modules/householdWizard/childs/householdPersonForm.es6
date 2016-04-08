@@ -43,9 +43,10 @@ export default React.createClass({
         var list = (this.state.list.length > 0) ? this.state.list.concat(person) : person;
         this.setState({list:list});
     },
-    handleRemoveButtonClick:function(person){
-        if(this.state.list.indexOf(person) !== -1) {
-            this.state.list.splice(this.state.list.indexOf(person), 1);
+    handleRemoveButtonClick:function(index){
+        console.log(index, this.state.list);
+        if(this.state.list[index] !== void(0)) {
+            this.state.list.splice(index, 1);
             this.setState({list:this.state.list});
         }
     },
@@ -53,7 +54,7 @@ export default React.createClass({
         var _this = this;
         var peopleList = this.state.list.map(function(person, index){
             return (
-                <PersonForm key={index} data={person} onRemoveButtonClick={_this.handleRemoveButtonClick} onNewButtonClick={_this.handleAddNewButtonClick} />
+                <PersonForm key={index} position={index} data={person} onRemoveButtonClick={_this.handleRemoveButtonClick} onNewButtonClick={_this.handleAddNewButtonClick} />
             )
         });
         return (
