@@ -9,7 +9,8 @@ export default React.createClass({
     },
     componentDidMount:function() {
         if(this.props.data !== void(0)){
-            this.setState(Object.assign(this.state, this.props.data));
+            console.log(this.props.data.list);
+            this.setState({list:this.props.data.list});
         }
     },
     handlePreviousButtonClick:function(){
@@ -18,25 +19,15 @@ export default React.createClass({
         }
     },
     handleNextButtonClick:function() {
-        var emptyFields = false, count=0, form=this.state;
-        Object.keys(form).map(function(key){
-            console.log(form[key], key);
-            if(form[key] === void(0) || form[key] === null || form[key] === ''){
-                emptyFields = true;
-            }
-            count++;
-        });
-        if(count === Object.keys(form).length){
-            if(emptyFields === true){
-                window.alert('You must fill all the form fields');
-            } else {
-                if(this.props.onNextButtonClick !== void(0) && typeof(this.props.onNextButtonClick) === 'function'){
-                    this.props.onNextButtonClick(form);
-                }
+        if(this.state.list.length === 0){
+            window.alert('You must add at least one person to the household');
+        } else {
+            if(this.props.onNextButtonClick !== void(0) && typeof(this.props.onNextButtonClick) === 'function'){
+                this.props.onNextButtonClick(this.state.list);
             }
         }
     },
-    handleAddNewButtonClick:function(){
+    handleAddNewButtonClick:function(addPerson){
         var person = [{
             first_name:void(0),
             last_name:void(0),
@@ -44,6 +35,11 @@ export default React.createClass({
             age:void(0),
             gender:'m'
         }];
+        console.log(addPerson);
+        if(typeof(addPerson) === 'object' && 'first_name' in addPerson){
+            this.state.list.pop();
+            person.splice(0,0,addPerson);
+        }
         var list = (this.state.list.length > 0) ? this.state.list.concat(person) : person;
         this.setState({list:list});
     },

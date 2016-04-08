@@ -12,7 +12,7 @@ export default React.createClass({
     },
     componentDidMount:function() {
         if(this.props.data !== void(0)){
-            this.state.form = Object.assign(this.state, this.props.data);
+            this.setState(Object.assign(this.state, this.props.data));
         }
     },
     handleAdd:function() {

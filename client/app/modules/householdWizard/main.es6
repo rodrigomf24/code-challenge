@@ -24,9 +24,10 @@ export default React.createClass({
     },
     componentDidMount:function() {},
     handlePrevious:function(current, data){
+        console.log('PREVIOUS', current, data);
         switch(current){
             case 'persons':
-                this.setState({persons:data, showHouseholdForm:true, showPersonForm:false, showVehicleForm:false});
+                this.setState({persons:{list:data}, showHouseholdForm:true, showPersonForm:false, showVehicleForm:false});
                 break;
             case 'vehicles':
                 this.setState({vehicles:data, showHouseholdForm:false, showPersonForm:true, showVehicleForm:false});
@@ -38,14 +39,16 @@ export default React.createClass({
     handleHouseholdFormSubmit:function(data) {
         // do post here
         console.log('House',data);
-        this.setState({household:data, showHouseholdForm:false, showPersonForm:true});
+        this.setState({house:data, showHouseholdForm:false, showPersonForm:true, showVehicleForm:false});
     },
     handleHouseholdPersonFormSubmit:function(data) {
         // do post here
-        console.log('FROM WIZARD',data);
+        console.log('Person',data);
+        this.setState({persons:data, showHouseholdForm:false, showPersonForm:false, showVehicleForm:true});
     },
     handleHouseholdVehicleFormSubmit:function(data) {
         // do post here
+        console.log('Vehicle',data);
     },
     render:function() {
         return (
