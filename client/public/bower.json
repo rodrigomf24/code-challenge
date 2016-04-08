@@ -1,0 +1,19 @@
+{
+  "name": "public",
+  "homepage": "https://github.com/rodrigomf24/code-challenge",
+  "authors": [
+    "Rodrigo Morales <rodrigomf24@gmail.com>"
+  ],
+  "description": "code challenge public assets",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
