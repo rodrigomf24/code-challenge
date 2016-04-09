@@ -4,9 +4,19 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var pg = require('pg');
+Promise = require('promise');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var household = require('./routes/household');
+
+/*DB SETUP*/
+DBClient = new pg.Client({user:'postgres', database:'codechallenge', password:'123'});
+// DBClient.on('drain', DBClient.end.bind(DBClient)); //disconnect client when all queries are finished
+DBClient.connect();
+DBClient.on('error', function(error) {
+  console.log('ERROR', error);
+});
 
 var app = express();
 
@@ -23,7 +33,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/api/v1/household', household);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
