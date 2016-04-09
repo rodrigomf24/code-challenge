@@ -1,4 +1,5 @@
 import React from "react";
+import HouseholdWizardService from "./../../../services/HouseholdWizardService";
 
 export default React.createClass({
     getInitialState:function() {
@@ -8,6 +9,7 @@ export default React.createClass({
             city:void(0),
             state:void(0),
             bedrooms_number:void(0),
+            id:void(0),
             alerts:[]
         };
     },
@@ -22,6 +24,7 @@ export default React.createClass({
         });
     },
     componentDidMount:function() {
+        console.log(this.props.data);
         if(this.props.data !== void(0)){
             this.setState(Object.assign(this.state, this.props.data));
         }
@@ -33,7 +36,7 @@ export default React.createClass({
         console.log(form);
         Object.keys(form).map(function(key){
             console.log(form[key], key);
-            if(form[key] === void(0) || form[key] === null || form[key] === ''){
+            if(key !== 'id' && (form[key] === void(0) || form[key] === null || form[key] === '')){
                 emptyFields = true;
             }
             count++;

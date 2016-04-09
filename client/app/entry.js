@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDom from "react-dom";
-import HouseholdWizard from "./modules/householdWizard/main"
+import App from "./modules/app";
 
 ReactDom.render(
-    <HouseholdWizard />,
+    <App />,
     document.getElementById('app')
 )

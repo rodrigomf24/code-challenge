@@ -96,4 +96,4 @@ var Vehicle = {
   }
 };
 
-module.exports = PersonVehicles;
+module.exports = Vehicle;

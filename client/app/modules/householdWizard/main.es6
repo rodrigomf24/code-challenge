@@ -3,6 +3,7 @@ import HouseholdForm from "./childs/householdForm";
 import HouseholdPersonForm from "./childs/householdPersonForm";
 import HouseholdVehicleForm from "./childs/householdVehicleForm";
 import HouseholdSummary from "./childs/householdSummary";
+import HouseholdWizardService from "./../../services/HouseholdWizardService";
 
 export default React.createClass({
     getInitialState:function() {
@@ -47,7 +48,28 @@ export default React.createClass({
             showSummary:false
         });
     },
-    componentDidMount:function() {},
+    componentDidMount:function() {
+        console.log(this.props);
+        if(this.props.householdId !== void(0)) {
+            var _this = this;
+            this.setState({showHouseholdForm:false});
+            HouseholdWizardService.get.household.single(this.props.householdId).then(function(response) {
+                if(typeof(response) === 'object') {
+                    console.log(response[0]);
+                    _this.setState({
+                        house:{
+                            address:response[0].address,
+                            zip:response[0].zip,
+                            city:response[0].city,
+                            state:response[0].state,
+                            bedrooms_number:response[0].bedrooms_number
+                        },
+                        showHouseholdForm:true
+                    });
+                }
+            });
+        }
+    },
     handlePrevious:function(current, data){
         console.log('PREVIOUS', current, data);
         switch(current){
