@@ -9,6 +9,10 @@ Promise = require('promise');
 
 var routes = require('./routes/index');
 var household = require('./routes/household');
+var household_objects = require('./routes/household_objects');
+var person_vehicles = require('./routes/person_vehicles');
+var person = require('./routes/person');
+var vehicle = require('./routes/vehicle');
 
 /*DB SETUP*/
 DBClient = new pg.Client({user:'postgres', database:'codechallenge', password:'123'});
@@ -34,6 +38,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/api/v1/household', household);
+app.use('/api/v1/person', person);
+app.use('/api/v1/vehicle', vehicle);
+app.use('/api/v1/household-objects', household_objects);
+app.use('/api/v1/person-vehicles', person_vehicles);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
