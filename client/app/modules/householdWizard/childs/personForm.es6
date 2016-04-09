@@ -3,6 +3,7 @@ import React from "react";
 export default React.createClass({
     getInitialState:function() {
         return {
+            id:void(0),
             first_name:void(0),
             last_name:void(0),
             email:void(0),
@@ -15,44 +16,72 @@ export default React.createClass({
             this.setState(Object.assign(this.state, this.props.data));
         }
     },
-    handleAdd:function() {
+    fieldsAreEmpty:function(){
         var emptyFields = false, count=0, form=this.state;
-        Object.keys(form).map(function(key){
-            console.log(form[key], key);
-            if(form[key] === void(0) || form[key] === null || form[key] === ''){
-                emptyFields = true;
-            }
-            count++;
-        });
-        if(count === Object.keys(form).length){
-            if(emptyFields === true){
-                window.alert('You must fill all the form fields');
-            } else {
-                if(this.props.onNewButtonClick !== void(0) && typeof(this.props.onNewButtonClick) === 'function'){
-                    this.props.onNewButtonClick(form);
+        return new Promise(function(resolve, reject){
+            Object.keys(form).map(function(key){
+                console.log(form[key], key);
+                if(form[key] === void(0) || form[key] === null || form[key] === ''){
+                    emptyFields = true;
+                }
+                count++;
+            });
+            if(count === Object.keys(form).length){
+                if(emptyFields === true){
+                    resolve(true);
+                } else {
+                    resolve(false);
                 }
             }
-        }
+        });
+    },
+    handleAdd:function() {
+        var _this = this;
+        this.fieldsAreEmpty().then(function(response){
+            console.log(response);
+            if(response){
+                window.alert('You must fill all the form fields');
+            } else {
+                if(_this.props.onNewButtonClick !== void(0) && typeof(_this.props.onNewButtonClick) === 'function'){
+                    _this.props.onNewButtonClick(_this.state);
+                }
+            }
+        });
     },
     handleRemovePersonButtonClick:function(){
         if(this.props.onRemoveButtonClick !== void(0) && typeof(this.props.onRemoveButtonClick) === 'function'){
             this.props.onRemoveButtonClick(this.props.position);
         }
     },
+    handleParentUpdate:function() {
+        var _this = this;
+        setTimeout(function(){
+            if(_this.props.onStateChange !== void(0) && typeof(_this.props.onStateChange) === 'function') {
+                console.log(_this.state);
+                _this.props.onStateChange(_this.props.position, _this.state);
+            }
+        }, 150);
+    },
     handleFirstNameChange:function(value) {
         this.setState({first_name:value});
+        this.handleParentUpdate();
     },
     handleLastNameChange:function(value) {
         this.setState({last_name:value});
+        this.handleParentUpdate();
     },
     handleEmailChange:function(value) {
         this.setState({email:value});
+        this.handleParentUpdate();
     },
     handleAgeChange:function(value) {
         this.setState({age:value});
+        this.handleParentUpdate();
     },
     handleGenderChange:function(e) {
-        this.setState({gender:e.currentTarget.value});
+        console.log(e.target.value);
+        this.setState({gender:e.target.value});
+        this.handleParentUpdate();
     },
     render:function() {
         var valueLink = {

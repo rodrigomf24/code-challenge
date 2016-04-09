@@ -31,6 +31,7 @@ export default React.createClass({
     },
     handleAddNewButtonClick:function(addPerson){
         var person = [{
+            id:(this.state.list.length + 1),
             first_name:void(0),
             last_name:void(0),
             email:void(0),
@@ -52,11 +53,17 @@ export default React.createClass({
             this.setState({list:this.state.list});
         }
     },
+    handleOnChildStateChange:function(index, data) {
+        console.log(index, data);
+        this.state.list.splice(index, 1, Object.assign(this.state.list[index], data));
+        var list = this.state.list;
+        this.setState({list:list});
+    },
     render:function() {
         var _this = this;
         var peopleList = this.state.list.map(function(person, index){
             return (
-                <PersonForm key={index} position={index} data={person} onRemoveButtonClick={_this.handleRemoveButtonClick} onNewButtonClick={_this.handleAddNewButtonClick} />
+                <PersonForm key={index} position={index} data={person} onStateChange={_this.handleOnChildStateChange} onRemoveButtonClick={_this.handleRemoveButtonClick} onNewButtonClick={_this.handleAddNewButtonClick} />
             )
         });
         return (

@@ -6,7 +6,8 @@ export default React.createClass({
             make:void(0),
             model:void(0),
             year:void(0),
-            license_plate:void(0)
+            license_plate:void(0),
+            owner:void(0)
         };
     },
     componentDidMount:function() {
@@ -52,9 +53,13 @@ export default React.createClass({
         }
     },
     handleParentUpdate:function() {
-        if(this.props.onStateChange !== void(0) && typeof(this.props.onStateChange) === 'function') {
-            this.props.onStateChange(this.props.position, this.state);
-        }
+        var _this = this;
+        setTimeout(function(){
+            if(_this.props.onStateChange !== void(0) && typeof(_this.props.onStateChange) === 'function') {
+                console.log(_this.state);
+                _this.props.onStateChange(_this.props.position, _this.state);
+            }
+        }, 150);
     },
     handleMakeChange:function(value) {
         this.setState({make:value});
@@ -70,6 +75,10 @@ export default React.createClass({
     },
     handleLicensePlateChange:function(value) {
         this.setState({license_plate:value});
+        this.handleParentUpdate();
+    },
+    handleOwnerChange:function(e) {
+        this.setState({owner:e.target.value});
         this.handleParentUpdate();
     },
     render:function() {
@@ -90,7 +99,12 @@ export default React.createClass({
                 value: this.state.license_plate,
                 requestChange: this.handleLicensePlateChange
             }
-        };
+        },
+        persons = (this.props.persons !== void(0) && this.props.persons.list.length > 0) ? this.props.persons.list.map(function(person, index){
+            return (
+                <option key={index} value={person.id}>{person.first_name} {person.last_name}</option>
+            );
+        }) : null;
         return (
             <div className="row">
                 <div className="col-xs-12">
@@ -138,6 +152,17 @@ export default React.createClass({
                                 placeholder="vehicle license plate"
                                 valueLink={valueLink.license_plate}
                             />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="owner">Owner</label>
+                            <select
+                                id="owner"
+                                className="form-control"
+                                onChange={this.handleOwnerChange}
+                                value={this.state.owner}>
+                                <option value=""></option>
+                                {persons}
+                            </select>
                         </div>
                         <button type="button" onClick={this.handleAdd} className="btn btn-info">Add new</button>
                     </form>

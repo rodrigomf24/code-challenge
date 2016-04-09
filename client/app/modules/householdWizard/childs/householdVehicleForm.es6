@@ -28,7 +28,8 @@ export default React.createClass({
             make:void(0),
             model:void(0),
             year:void(0),
-            license_plate:void(0)
+            license_plate:void(0),
+            owner:void(0)
         }];
         if(typeof(addVehicle) === 'object' && 'make' in addVehicle){
             this.state.list.pop();
@@ -46,15 +47,18 @@ export default React.createClass({
     },
     handleOnChildStateChange:function(index, data) {
         console.log(index, data);
-        var list = this.state.list.splice(index, 1, Object.assign(this.state.list[index], data));
+        this.state.list.splice(index, 1, Object.assign(this.state.list[index], data));
+        var list = this.state.list;
         console.log(list);
         this.setState({list:list});
     },
     render:function() {
-        var _this = this;
-        var vehiclesList = this.state.list.map(function(vehicle, index){
+        var _this = this,
+        persons = (this.props.persons !== void(0)) ? this.props.persons : [],
+        vehiclesList = this.state.list.map(function(vehicle, index){
+            console.log(persons);
             return (
-                <VehicleForm key={index} position={index} data={vehicle} onStateChange={_this.handleOnChildStateChange} onRemoveButtonClick={_this.handleRemoveButtonClick} onNewButtonClick={_this.handleAddNewButtonClick} />
+                <VehicleForm key={index} persons={persons} position={index} data={vehicle} onStateChange={_this.handleOnChildStateChange} onRemoveButtonClick={_this.handleRemoveButtonClick} onNewButtonClick={_this.handleAddNewButtonClick} />
             )
         });
         return (
