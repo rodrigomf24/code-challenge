@@ -1,7 +1,6 @@
 # code-challenge
-Household wizard form
 
-* Execute npm i or npm install before the steps bellow
+**Execute npm i or npm install before the steps bellow**
 
 DB:
     + Reference on how to crate psql db user and grant permission to db using LINUX:
@@ -12,9 +11,12 @@ DB:
     + There is a file in the db folder, execute that file from psql, it will create the database and tables
     + Make sure to replace your psql user and password in the app.js file on line 18
 
-Start api app with the following command:
++ API - execute this from the server folder
 
-    + To see debug logs, execute npm run dev
-    + To skip debug, execute npm start
+    Start api app with the following command:
+
+        + To see debug logs, execute npm run dev
+        + To skip debug, execute npm start
     
-    
+
+ **Go to the client folder to see the client steps**   
