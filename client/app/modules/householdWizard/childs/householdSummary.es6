@@ -28,13 +28,10 @@ export default React.createClass({
             this.props.onPreviousButtonClick('summary');
         }
     },
-    handleFinishButtonClick:function(doSave) {
+    handleFinishButtonClick:function() {
         if(this.props.onFinishButtonClick !== void(0) && typeof(this.props.onFinishButtonClick) === 'function'){
-            this.props.onFinishButtonClick(doSave);
+            this.props.onFinishButtonClick();
         }
-    },
-    handleCancelButtonClick:function() {
-        this.handleFinishButtonClick(false);
     },
     render:function() {
         var _this = this;
@@ -99,8 +96,7 @@ export default React.createClass({
                             <ul className="pager">
                                 <li>
                                     <button type="button" onClick={this.handlePreviousButtonClick} className="btn btn-info">Previous</button>
-                                    <button type="button" onClick={this.handleFinishButtonClick} className="btn btn-success">Save</button>
-                                    <button type="button" onClick={this.handleCancelButtonClick} className="btn btn-danger">Cancel</button>
+                                    <button type="button" onClick={this.handleFinishButtonClick} className="btn btn-success">Close</button>
                                 </li>
                             </ul>
                         </nav>

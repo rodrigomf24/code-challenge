@@ -2,7 +2,7 @@
 var PersonVehicles = {
   get:{
     all:function() {
-      var _this = Household;
+      var _this = PersonVehicles;
       return new Promise(function(resolve, reject) {
         _this.executeQuery('SELECT * FROM person_vehicles;').then(function(response) {
           if(response.rows !== void(0) && response.rows.length > 0) {
@@ -16,7 +16,7 @@ var PersonVehicles = {
       });
     },
     single:function(id) {
-      var _this = Household;
+      var _this = PersonVehicles;
       return new Promise(function(resolve, reject) {
         _this.executeQuery('SELECT * FROM person_vehicles WHERE id = \''+id+'\';').then(function(response) {
           if(response.rows !== void(0) && response.rows.length > 0) {

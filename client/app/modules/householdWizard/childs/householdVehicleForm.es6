@@ -46,11 +46,17 @@ export default React.createClass({
         }
     },
     handleOnChildStateChange:function(index, data) {
-        console.log(index, data);
         this.state.list.splice(index, 1, Object.assign(this.state.list[index], data));
         var list = this.state.list;
-        console.log(list);
         this.setState({list:list});
+    },
+    handleReturnToList:function() {
+        if(this.props.onCloseWizardClick !== void(0) && typeof(this.props.onCloseWizardClick) === 'function') {
+            this.props.onCloseWizardClick();
+        }
+    },
+    showClose:function() {
+        return (this.props.householdId !== void(0)) ? true : false;
     },
     render:function() {
         var _this = this,
@@ -64,6 +70,9 @@ export default React.createClass({
         return (
             <div className="row">
                 <div className="col-xs-12">
+                    { this.showClose() ? <div className="pull-right">
+                        <button type="button" onClick={this.handleReturnToList} className="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div> : null }
                     <div className="page-header">
                         <h1>Household Wizard <small>household vehicle information</small></h1>
                     </div>

@@ -31,14 +31,13 @@ export default React.createClass({
     },
     handleAddNewButtonClick:function(addPerson){
         var person = [{
-            id:(this.state.list.length + 1),
+            id:void(0),
             first_name:void(0),
             last_name:void(0),
             email:void(0),
             age:void(0),
             gender:'m'
         }];
-        console.log(addPerson);
         if(typeof(addPerson) === 'object' && 'first_name' in addPerson){
             this.state.list.pop();
             person.splice(0,0,addPerson);
@@ -47,17 +46,23 @@ export default React.createClass({
         this.setState({list:list});
     },
     handleRemoveButtonClick:function(index){
-        console.log(index, this.state.list);
         if(this.state.list[index] !== void(0)) {
             this.state.list.splice(index, 1);
             this.setState({list:this.state.list});
         }
     },
     handleOnChildStateChange:function(index, data) {
-        console.log(index, data);
         this.state.list.splice(index, 1, Object.assign(this.state.list[index], data));
         var list = this.state.list;
         this.setState({list:list});
+    },
+    handleReturnToList:function() {
+        if(this.props.onCloseWizardClick !== void(0) && typeof(this.props.onCloseWizardClick) === 'function') {
+            this.props.onCloseWizardClick();
+        }
+    },
+    showClose:function() {
+        return (this.props.householdId !== void(0)) ? true : false;
     },
     render:function() {
         var _this = this;
@@ -69,6 +74,9 @@ export default React.createClass({
         return (
             <div className="row">
                 <div className="col-xs-12">
+                    { this.showClose() ? <div className="pull-right">
+                        <button type="button" onClick={this.handleReturnToList} className="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div> : null }
                     <div className="page-header">
                         <h1>Household Wizard <small>household people information</small></h1>
                     </div>

@@ -33,7 +33,7 @@ router.get('/:id', function(req, res, next) {
 
 var validateParameters = function(params, type) {
 	return new Promise(function(resolve, reject) {
-		var requiredFields = ['household_id', 'object_id'],
+		var requiredFields = ['household_id', 'object_id', 'type'],
 			valid = true,
 			values = [],
 			count=0;

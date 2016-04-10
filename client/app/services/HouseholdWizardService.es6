@@ -1,4 +1,31 @@
 var service = {
+    multiple:{
+        doInsert:function(path, params, list, returnList) {
+            var _this = this;
+            return new Promise(function(resolve, reject) {
+                var method = (params.id === void(0)) ? 'POST' : 'PUT';
+                service.executeRequest(method, path[method.toLowerCase()], params).then(function(response) {
+                    resolve(_this.onInsertResolve(path, list, returnList, response));
+                }, function(err) {
+                    resolve(_this.onInsertResolve(path, list, returnList, void(0)));
+                });
+            });
+        },
+        onInsertResolve:function(path, list, returnList, response) {
+            var _this = this;
+            return new Promise(function(resolve, reject) {
+                list.shift();
+                if(typeof(response) === 'object') {
+                    returnList = (returnList === void(0)) ? [response] : returnList.concat([response]);
+                }
+                if(list.length > 0) {
+                    resolve(_this.doInsert(path, list[0], list, returnList));
+                } else {
+                    resolve(returnList);
+                }
+            });
+        }
+    },
     get:{
         household:{
             single:function(id) {
@@ -8,37 +35,29 @@ var service = {
                 return service.executeRequest('GET', 'household');
             }
         },
-        persons:{
-            fromHusehold:function(householdId) {
-                
-            }
+        persons:function(householdId) {
+            return service.executeRequest('GET', 'person/'+householdId);
         },
-        vehicles:{
-            fromHousehold:function(householdId) {
-                
-            }
+        vehicles:function(householdId) {
+            return service.executeRequest('GET', 'vehicle/'+householdId);
+        }
+    },
+    upsert:{
+        persons:function(list, householdId) {
+            return service.multiple.doInsert({post:'person/'+householdId, put:'person'}, list[0], list);
+        },
+        vehicles:function(list, householdId) {
+            return service.multiple.doInsert({post:'vehicle/'+householdId, put:'vehicle'}, list[0], list);
         }
     },
     post:{
         household:function(params) {
-            
-        },
-        persons:function(params, householdId) {
-            
-        },
-        vehicles:function(params, householdId) {
-            
+            return service.executeRequest('POST', 'household', params);
         }
     },
     put:{
         household:function(params) {
-            
-        },
-        persons:function(params, householdId) {
-            
-        },
-        vehicles:function(params, householdId) {
-            
+            return service.executeRequest('PUT', 'household', params);
         }
     },
     delete:{

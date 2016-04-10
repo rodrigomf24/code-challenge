@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var vehicleModle = require('./../models/vehicle');
+var vehicleModel = require('./../models/vehicle');
+var householdObjectsModel = require('./../models/household_objects');
 
 /* GET household listing. */
 router.get('/', function(req, res, next) {
 	console.log('WITHOUT ID');
-	vehicleModl.get.all().then(function(response) {
+	vehicleModel.get.all().then(function(response) {
 		res.json(response);
 	}, function(err) {
 		res.status(404).json({
@@ -18,10 +19,10 @@ router.get('/:id', function(req, res, next) {
 	console.log('with id');
 	if(req.params.id === void(0)) {
 		res.status(404).json({
-			error:'missing parameter id'
+			error:'missing parameter household id'
 		});
 	} else {
-		vehicleModl.get.single(req.params.id).then(function(response) {
+		vehicleModel.get.all(req.params.id).then(function(response) {
 			res.json(response);
 		}, function(err) {
 			res.status(404).json({
@@ -33,7 +34,7 @@ router.get('/:id', function(req, res, next) {
 
 var validateParameters = function(params, type) {
 	return new Promise(function(resolve, reject) {
-		var requiredFields = ['make', 'model', 'year', 'license_plate'],
+		var requiredFields = ['make', 'model', 'year', 'license_plate','owner'],
 			valid = true,
 			values = [],
 			count=0;
@@ -57,17 +58,26 @@ var validateParameters = function(params, type) {
 	});
 }
 
-router.post('/', function(req, res, next) {
-	if(typeof(req.body) === 'object' && Object.keys(req.body).length > 0) {
+
+router.post('/:house', function(req, res, next) {
+	if(typeof(req.body) === 'object' && Object.keys(req.body).length > 0 && req.params.house !== void(0)) {
 		validateParameters(req.body, 'post').then(function(response) {
 			if(!response.valid) {
 				res.status(404).json({
 					error:'invalid parameteres'
 				});
 			} else {
-				vehicleModl.post(response.values).then(function(response) {
-					req.body.id = response[0].id;
-					res.json(req.body);
+				vehicleModel.post(response.values).then(function(response) {
+                    req.body.id = response[0].id;
+                    householdObjectsModel.post([req.params.house,req.body.id,'vehicle'])
+                        .then(function(response) {
+                            console.log('object INSERT', response);
+                            res.json(req.body);
+                        }, function(err) {
+                            res.status(404).json({
+                                error:err
+                            });
+                        });
 				}, function(err) {
 					res.status(404).json({
 						error:err
@@ -92,7 +102,7 @@ router.put('/', function(req, res, next) {
 					error:'invalid parameteres'
 				});
 			} else {
-				vehicleModl.put(id, response.values).then(function(response) {
+				vehicleModel.put(id, response.values).then(function(response) {
 					req.body.id = response[0].id;
 					res.json(req.body);
 				}, function(err) {
@@ -115,7 +125,7 @@ router.delete('/:id', function(req, res, next) {
 			error:'invalid parameters, id missing'
 		});
 	} else {
-		vehicleModl.delete(req.params.id).then(function(response) {
+		vehicleModel.delete(req.params.id).then(function(response) {
 			res.json({id:req.params.id, deleted:response});
 		}, function(err) {
 			res.status(404).json({

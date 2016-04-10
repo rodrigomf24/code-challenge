@@ -28,6 +28,7 @@ CREATE TABLE household_objects (
 	id serial PRIMARY KEY,
 	household_id smallint NOT NULL,
 	object_id smallint NOT NULL,
+    type varchar(30) NOT NULL,
 	created_date timestamp DEFAULT current_timestamp
 );
 
@@ -55,12 +56,12 @@ CREATE TABLE person (
 -- 	people_id
 -- 	vehicle_id
 
-CREATE TABLE person_vehicles (
-	id serial PRIMARY KEY,
-	person_id smallint NOT NULL,
-	vehicle_id smallint NOT NULL,
-	created_date timestamp DEFAULT current_timestamp
-);
+-- CREATE TABLE person_vehicles (
+-- 	id serial PRIMARY KEY,
+-- 	person_id smallint NOT NULL,
+-- 	vehicle_id smallint NOT NULL,
+-- 	created_date timestamp DEFAULT current_timestamp
+-- );
 
 -- table vehicles
 -- 	id
@@ -75,5 +76,6 @@ CREATE TABLE vehicle (
 	model varchar(255) NOT NULL,
 	year varchar(6) NOT NULL,
 	license_plate varchar(100),
+    owner smallint,
 	created_date timestamp DEFAULT current_timestamp
 );

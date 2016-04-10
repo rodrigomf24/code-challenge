@@ -28,11 +28,16 @@ export default React.createClass({
             this.props.onHouseholdClick($(e.currentTarget)[0].id);
         }
     },
+    handleNewFormButtonClick:function() {
+        if(this.props.onNewClick !== void(0) && typeof(this.props.onNewClick) === 'function') {
+            this.props.onNewClick();
+        }
+    },
     render:function() {
         var _this = this,
         households = this.state.list.map(function(house, index) {
             return (
-                <tr key={index} id={house.id} onClick={_this.handleHouseholdClick}>
+                <tr key={index}>
                     <td>{house.address}</td>
                     <td>{house.zip}</td>
                     <td>{house.city}</td>
@@ -41,7 +46,7 @@ export default React.createClass({
                     <td></td>
                     <td></td>
                     <td>
-                        <a className="btn btn-default" role="button">Edit</a>
+                        <a className="btn btn-default" role="button" id={house.id} onClick={_this.handleHouseholdClick}>Edit</a>
                         <a className="btn btn-default" role="button">Remove</a>
                     </td>
                 </tr>
@@ -49,6 +54,9 @@ export default React.createClass({
         });
         return (
             <div className="col-xs-12">
+                <div className="row">
+                    <a className="btn btn-info" role="button" onClick={_this.handleNewFormButtonClick}>New</a>
+                </div>
                 <div className="row">
                     <table className="table">
                         <thead>

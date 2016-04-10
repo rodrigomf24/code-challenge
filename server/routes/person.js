@@ -1,17 +1,24 @@
 var express = require('express');
 var router = express.Router();
 var personModel = require('./../models/person');
+var householdObjectsModel = require('./../models/household_objects');
 
 /* GET household listing. */
-router.get('/', function(req, res, next) {
+router.get('/:house', function(req, res, next) {
 	console.log('WITHOUT ID');
-	personModel.get.all().then(function(response) {
-		res.json(response);
-	}, function(err) {
+    if(req.params.house === void(0)) {
 		res.status(404).json({
-			error:err
+			error:'missing parameter household id'
 		});
-	});
+	} else {
+        personModel.get.all(req.params.house).then(function(response) {
+            res.json(response);
+        }, function(err) {
+            res.status(404).json({
+                error:err
+            });
+        });
+    }
 });
 
 router.get('/:id', function(req, res, next) {
@@ -57,17 +64,26 @@ var validateParameters = function(params, type) {
 	});
 }
 
-router.post('/', function(req, res, next) {
-	if(typeof(req.body) === 'object' && Object.keys(req.body).length > 0) {
+router.post('/:house', function(req, res, next) {
+	if(typeof(req.body) === 'object' && Object.keys(req.body).length > 0 && req.params.house !== void(0)) {
 		validateParameters(req.body, 'post').then(function(response) {
 			if(!response.valid) {
 				res.status(404).json({
 					error:'invalid parameteres'
 				});
 			} else {
+                console.log(response.values);
 				personModel.post(response.values).then(function(response) {
-					req.body.id = response[0].id;
-					res.json(req.body);
+                    req.body.id = response[0].id;
+                    householdObjectsModel.post([req.params.house,req.body.id,'person'])
+                        .then(function(response) {
+                            console.log('object INSERT', response);
+                            res.json(req.body);
+                        }, function(err) {
+                            res.status(404).json({
+                                error:err
+                            });
+                        });
 				}, function(err) {
 					res.status(404).json({
 						error:err

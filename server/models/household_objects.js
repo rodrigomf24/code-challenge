@@ -1,7 +1,7 @@
 var HouseholdObjects = {
   get:{
     all:function() {
-      var _this = Household;
+      var _this = HouseholdObjects;
       return new Promise(function(resolve, reject) {
         _this.executeQuery('SELECT * FROM household_objects;').then(function(response) {
           if(response.rows !== void(0) && response.rows.length > 0) {
@@ -15,7 +15,7 @@ var HouseholdObjects = {
       });
     },
     single:function(id) {
-      var _this = Household;
+      var _this = HouseholdObjects;
       return new Promise(function(resolve, reject) {
         _this.executeQuery('SELECT * FROM household_objects WHERE id = \''+id+'\';').then(function(response) {
           if(response.rows !== void(0) && response.rows.length > 0) {
@@ -31,12 +31,14 @@ var HouseholdObjects = {
   },
   post:function(params) {
     var _this = this;
+    console.log('OBJ MODEL', params);
     return new Promise(function(resolve, reject) {
       var values = params.reduce(function(acc, curr) {
         acc.push('\''+curr+'\'');
         return acc;
       }, []);
-      _this.executeQuery('INSERT INTO household_objects (household_id, object_id) VALUES ('+values.join(', ')+') RETURNING id;')
+      console.log('VALUES', values);
+      _this.executeQuery('INSERT INTO household_objects (household_id, object_id, type) VALUES ('+values.join(', ')+') RETURNING id;')
         .then(function(response) {
           if(response.rows !== void(0) && response.rows.length > 0) {
             resolve(response.rows);

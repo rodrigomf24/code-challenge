@@ -1,22 +1,23 @@
 
 var Person = {
   get:{
-    all:function() {
-      var _this = Household;
+    all:function(householdId) {
+      var _this = Person;
       return new Promise(function(resolve, reject) {
-        _this.executeQuery('SELECT * FROM person;').then(function(response) {
-          if(response.rows !== void(0) && response.rows.length > 0) {
-            resolve(response.rows);
-          } else {
-            reject('Request failed');
-          }
-        }, function(err) {
-          reject(err);
-        });
+        _this.executeQuery('SELECT * FROM person WHERE id IN (SELECT object_id FROM household_objects WHERE type = \'person\' AND household_id = \''+householdId+'\');')
+            .then(function(response) {
+                if(response.rows !== void(0) && response.rows.length > 0) {
+                    resolve(response.rows);
+                } else {
+                    reject('Request failed');
+                }
+            }, function(err) {
+                reject(err);
+            });
       });
     },
     single:function(id) {
-      var _this = Household;
+      var _this = Person;
       return new Promise(function(resolve, reject) {
         _this.executeQuery('SELECT * FROM person WHERE id = \''+id+'\';').then(function(response) {
           if(response.rows !== void(0) && response.rows.length > 0) {

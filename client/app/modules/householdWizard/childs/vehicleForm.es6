@@ -19,7 +19,6 @@ export default React.createClass({
         var emptyFields = false, count=0, form=this.state;
         return new Promise(function(resolve, reject){
             Object.keys(form).map(function(key){
-                console.log(form[key], key);
                 if(form[key] === void(0) || form[key] === null || form[key] === ''){
                     emptyFields = true;
                 }
@@ -37,7 +36,6 @@ export default React.createClass({
     handleAdd:function() {
         var _this = this;
         this.fieldsAreEmpty().then(function(response){
-            console.log(response);
             if(response){
                 window.alert('You must fill all the form fields');
             } else {
@@ -56,7 +54,6 @@ export default React.createClass({
         var _this = this;
         setTimeout(function(){
             if(_this.props.onStateChange !== void(0) && typeof(_this.props.onStateChange) === 'function') {
-                console.log(_this.state);
                 _this.props.onStateChange(_this.props.position, _this.state);
             }
         }, 150);

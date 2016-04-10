@@ -1,5 +1,4 @@
 import React from "react";
-import HouseholdWizardService from "./../../../services/HouseholdWizardService";
 
 export default React.createClass({
     getInitialState:function() {
@@ -20,6 +19,7 @@ export default React.createClass({
             city:void(0),
             state:void(0),
             bedrooms_number:void(0),
+            id:void(0),
             alerts:[]
         });
     },
@@ -82,6 +82,14 @@ export default React.createClass({
     handleBedroomsNumberChange:function(value) {
         this.setState({bedrooms_number:(value > 0) ? value : 0});
     },
+    handleReturnToList:function() {
+        if(this.props.onCloseWizardClick !== void(0) && typeof(this.props.onCloseWizardClick) === 'function') {
+            this.props.onCloseWizardClick();
+        }
+    },
+    showClose:function() {
+        return (this.props.householdId !== void(0)) ? true : false;
+    },
     render:function() {
         var valueLink = {
             address:{
@@ -108,7 +116,9 @@ export default React.createClass({
         return (
             <div className="row">
                 <div className="col-xs-12">
-                    <div className="alerts" dangerouslySetInnerHTML={this.getAlertsHtml()}></div>
+                    { this.showClose() ? <div className="pull-right">
+                        <button type="button" onClick={this.handleReturnToList} className="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div> : null }
                     <div className="page-header">
                         <h1>Household Wizard <small>household information</small></h1>
                     </div>

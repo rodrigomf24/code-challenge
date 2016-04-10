@@ -1,24 +1,26 @@
 
 var Vehicle = {
   get:{
-    all:function() {
-      var _this = Household;
+    all:function(householdId) {
+      var _this = Vehicle;
       return new Promise(function(resolve, reject) {
-        _this.executeQuery('SELECT * FROM vehicle;').then(function(response) {
-          if(response.rows !== void(0) && response.rows.length > 0) {
-            resolve(response.rows);
-          } else {
-            reject('Request failed');
-          }
-        }, function(err) {
-          reject(err);
-        });
+        _this.executeQuery('SELECT * FROM vehicle WHERE id IN (SELECT object_id FROM household_objects WHERE type = \'vehicle\' AND household_id = \''+householdId+'\');')
+            .then(function(response) {
+                if(response.rows !== void(0) && response.rows.length > 0) {
+                    resolve(response.rows);
+                } else {
+                    reject('Request failed');
+                }
+            }, function(err) {
+                reject(err);
+            });
       });
     },
     single:function(id) {
-      var _this = Household;
+      var _this = Vehicle;
       return new Promise(function(resolve, reject) {
-        _this.executeQuery('SELECT * FROM vehicle WHERE id = \''+id+'\';').then(function(response) {
+        _this.executeQuery('SELECT * FROM vehicle WHERE id = \''+id+'\';')
+        .then(function(response) {
           if(response.rows !== void(0) && response.rows.length > 0) {
             resolve(response.rows);
           } else {
@@ -37,7 +39,7 @@ var Vehicle = {
         acc.push('\''+curr+'\'');
         return acc;
       }, []);
-      _this.executeQuery('INSERT INTO vehicle (make, model, year, license_plate) VALUES ('+values.join(', ')+') RETURNING id;')
+      _this.executeQuery('INSERT INTO vehicle (make, model, year, license_plate, owner) VALUES ('+values.join(', ')+') RETURNING id;')
         .then(function(response) {
           if(response.rows !== void(0) && response.rows.length > 0) {
             resolve(response.rows);
