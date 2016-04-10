@@ -159,6 +159,7 @@ export default React.createClass({
                                 id="state"
                                 type="text"
                                 className="form-control"
+                                maxLength="2"
                                 placeholder="state"
                                 valueLink={valueLink.state}
                             />

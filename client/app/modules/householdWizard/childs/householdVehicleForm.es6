@@ -1,5 +1,6 @@
 import React from "react";
 import VehicleForm from "./vehicleForm";
+import HouseholdWizardService from "./../../../services/HouseholdWizardService";
 
 export default React.createClass({
     getInitialState:function() {
@@ -41,6 +42,9 @@ export default React.createClass({
     handleRemoveButtonClick:function(index) {
         console.log(index, this.state.list);
         if(this.state.list[index] !== void(0)) {
+            if(this.state.list[index].id !== void(0)){
+                HouseholdWizardService.delete.vehicle(this.state.list[index].id);
+            }
             this.state.list.splice(index, 1);
             this.setState({list:this.state.list});
         }

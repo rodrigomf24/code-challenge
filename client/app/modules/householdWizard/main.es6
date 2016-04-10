@@ -73,20 +73,24 @@ export default React.createClass({
             });
         }
     },
-    upsertPersons:function(data, callback) {
+    upsertPersons:function(data, callback, skipVehicles) {
         var _this = this;
         HouseholdWizardService.upsert.persons(data, this.state.house.id).then(function(response) {
             console.log('PERSON',response, response[0]);
             if(Array.isArray(response)) {
                 data = response;
             }
-            HouseholdWizardService.get.vehicles(_this.state.house.id).then(function(response) {
-                if(Array.isArray(response) && response.length > 0) {
-                    callback(data, response);
-                }
-            }, function(err) {
-                callback(data, []);
-            });
+            if(skipVehicles === void(0)){
+                HouseholdWizardService.get.vehicles(_this.state.house.id).then(function(response) {
+                    if(Array.isArray(response) && response.length > 0) {
+                        callback(data, response);
+                    }
+                }, function(err) {
+                    callback(data, []);
+                });
+            } else {
+                callback(data);
+            }
         }, function(error) {
             callback(data);
         });
@@ -109,7 +113,7 @@ export default React.createClass({
             case 'persons':
                 this.upsertPersons(data, function(data) {
                     _this.setState({persons:{list:data}, showHouseholdForm:true, showPersonForm:false, showVehicleForm:false, showSummary:false});
-                });
+                }, true);
                 break;
             case 'vehicles':
                 this.upsertVehicles(data, function(data) {

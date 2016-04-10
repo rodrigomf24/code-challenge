@@ -18,6 +18,8 @@ export default React.createClass({
             if(typeof(response) === 'object') {
                 _this.setState({list:response});
             }
+        }, function(){
+            _this.setState({list:[]});
         });
     },
     componentDidMount:function() {
@@ -33,6 +35,15 @@ export default React.createClass({
             this.props.onNewClick();
         }
     },
+    handleHouseholdRemove:function(e) {
+        var _this = this;
+        HouseholdWizardService.delete.household($(e.currentTarget)[0].id.replace('remove_', ''))
+            .then(function(response) {
+                _this.pullHouseholdForms();
+            }, function(){
+                _this.pullHouseholdForms();
+            });
+    },
     render:function() {
         var _this = this,
         households = this.state.list.map(function(house, index) {
@@ -47,7 +58,7 @@ export default React.createClass({
                     <td></td>
                     <td>
                         <a className="btn btn-default" role="button" id={house.id} onClick={_this.handleHouseholdClick}>Edit</a>
-                        <a className="btn btn-default" role="button">Remove</a>
+                        <a className="btn btn-default" role="button" id={'remove_'+house.id} onClick={_this.handleHouseholdRemove}>Remove</a>
                     </td>
                 </tr>
             );

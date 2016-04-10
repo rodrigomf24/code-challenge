@@ -61,14 +61,14 @@ var service = {
         }
     },
     delete:{
-        household:function(params) {
-            
+        household:function(id) {
+            return service.executeRequest('DELETE', 'household/'+id);
         },
-        persons:function(params, householdId) {
-            
+        person:function(id) {
+            return service.executeRequest('DELETE', 'person/'+id);
         },
-        vehicles:function(params, householdId) {
-            
+        vehicle:function(id) {
+            return service.executeRequest('DELETE', 'vehicle/'+id);
         }
     },
     executeRequest:function(method, path, params) {

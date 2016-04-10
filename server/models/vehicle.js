@@ -72,7 +72,7 @@ var Vehicle = {
   delete:function(id) {
     var _this = this;
     return new Promise(function(resolve, reject) {
-      _this.executeQuery('DELETE FROM vehicle WHERE id = \''+id+'\';').then(function(response) {
+      _this.executeQuery('DELETE FROM vehicle WHERE id = \''+id+'\'; DELETE FROM household_objects WHERE object_id =\''+id+'\';').then(function(response) {
         if('rowCount' in response && response.rowCount > 0) {
           resolve(true);
         } else {
