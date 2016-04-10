@@ -4,12 +4,12 @@ react test project
 
 Steps:
 
-make sure to install webpack and webpack-dev-server  ex. npm install webpack -g && npm install webpack-dev-server -g
+* make sure to install webpack and webpack-dev-server  ex. npm install webpack -g && npm install webpack-dev-server -g
 
-To install all the dependencies:
++ Install all the dependencies:
 
-    npm i or npm install
+    - npm install && cd public && bower install && cd ../
     
-To run the application:
++ Run the application:
 
-    npm start
+    - npm start

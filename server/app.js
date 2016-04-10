@@ -15,7 +15,7 @@ var person = require('./routes/person');
 var vehicle = require('./routes/vehicle');
 
 /*DB SETUP*/
-DBClient = new pg.Client({user:'postgres', database:'codechallenge', password:'123'});
+DBClient = new pg.Client({user:'postgres', database:'codechallenge', password:'123'}); // change password value
 // DBClient.on('drain', DBClient.end.bind(DBClient)); //disconnect client when all queries are finished
 DBClient.connect();
 DBClient.on('error', function(error) {

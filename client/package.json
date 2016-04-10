@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run compile-css && webpack-dev-server --inline --progress --display-error-details --watch-poll --port 3333 --content-base public/",
+    "start": "webpack-dev-server --inline --progress --display-error-details --watch-poll --port 3333 --content-base public/",
     "compile-css": "compass compile --trace"
   },
   "author": "Rodrigo Morales",
